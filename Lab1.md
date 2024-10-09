@@ -8,6 +8,7 @@
 1)Вход на сайт  [http://sandbox.usm.md/login.](http://sandbox.usm.md/login) с неверными данными username: student, password: studentpass.
 
 2)Анализ запросов и ответы на вопросы
+
   1.Метод POST
   
   2.content-type:text/plain;charset=UTF-8
@@ -28,6 +29,7 @@
     Accept: */*
 
 3)Ввод верных данных для входа и ответы на вопросы
+
   1.Метод POST
   
   2.content-type:text/plain;charset=UTF-8
