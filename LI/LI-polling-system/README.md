@@ -1,66 +1,264 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+## 1. Введение
+Проект **Polling System** представляет собой систему голосования, разработанную с использованием фреймворка Laravel. В рамках данного проекта были реализованы основные компоненты безопасности, такие как аутентификация, авторизация, защита маршрутов, работа с ролями пользователей, механизм выхода и защита от CSRF-атак. Проект позволяет пользователям создавать опросы, участвовать в них, просматривать результаты и фильтровать опросы по статусу.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 2. Инструкции по установке и запуску
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2.1 Требования
+- PHP ^8.0
+- Composer
+- MySQL или другой совместимый СУБД
+- Node.js и npm (для фронтенда)
 
-## Learning Laravel
+### 2.2 Установка
+1. **Клонирование проекта**:
+   ```bash
+   git clone https://github.com/your-repository/polling-system.git
+   cd polling-system
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Установка зависимостей**:
+   ```bash
+   composer install
+   npm install
+   ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. **Настройка окружения**:
+   Создайте файл `.env` на основе `.env.example` и настройте параметры подключения к базе данных:
+   ```env
+   DB_DATABASE=polling_system
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Запуск миграций**:
+   ```bash
+   php artisan migrate
+   ```
 
-## Laravel Sponsors
+5. **Генерация ключа приложения**:
+   ```bash
+   php artisan key:generate
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+6. **Запуск локального сервера**:
+   ```bash
+   php artisan serve
+   ```
 
-### Premium Partners
+7. **Открытие проекта в браузере**:
+   ```
+   http://127.0.0.1:8000
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## 3. Описание функционала
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3.1 Аутентификация пользователей
+Реализована система аутентификации с использованием стандартных возможностей Laravel:
 
-## Code of Conduct
+- **Регистрация**: Пользователи могут зарегистрироваться через форму регистрации.
+- **Вход**: Пользователи могут войти в систему, используя свои учетные данные.
+- **Выход**: Пользователи могут выйти из системы.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### Маршруты для аутентификации:
+```php
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'storeRegister']);
 
-## Security Vulnerabilities
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'storeLogin']);
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+```
 
-## License
+#### Представления:
+- `resources/views/auth/register.blade.php` — форма регистрации.
+- `resources/views/auth/login.blade.php` — форма входа.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+### 3.2 Авторизация пользователей
+Реализована система авторизации для защиты доступа к ресурсам:
+
+- **Личный кабинет**: Доступен только авторизованным пользователям.
+- **Маршрут**:
+  ```php
+  Route::get('/dashboard', function () {
+      return view('dashboard');
+  })->middleware('auth')->name('dashboard');
+  ```
+
+#### Представление:
+- `resources/views/dashboard.blade.php` — страница личного кабинета.
+
+---
+
+### 3.3 Роли пользователей
+Добавлена поддержка ролей (`admin` и `user`) для управления доступом к ресурсам:
+
+- **Добавление роли**:
+  Колонка `role` добавлена в таблицу `users` с возможными значениями `admin` и `user`.
+
+- **Проверка роли**:
+  Метод `isAdmin()` в модели `User.php`:
+  ```php
+  public function isAdmin()
+  {
+      return $this->role === 'admin';
+  }
+  ```
+
+- **Права доступа**:
+  Настроены права доступа с использованием `Gate`:
+  ```php
+  Gate::define('view-polls', function ($user) {
+      return $user->isAdmin();
+  });
+  ```
+
+- **Маршрут для администраторов**:
+  ```php
+  Route::get('/polls', [PollController::class, 'index'])->middleware('auth')->name('polls.index');
+  ```
+
+#### Представление:
+- `resources/views/polls/index.blade.php` — список опросов.
+
+---
+
+### 3.4 Создание опросов
+Пользователи могут создавать опросы с вопросами и вариантами ответов:
+
+- **Методы контроллера**:
+  ```php
+  public function store(Request $request)
+  {
+      $validated = $request->validate([
+          'question' => 'required|string|max:255',
+          'options' => 'required|array|min:2',
+          'options.*' => 'required|string|max:255',
+      ]);
+
+      $poll = auth()->user()->polls()->create(['question' => $validated['question']]);
+
+      foreach ($validated['options'] as $optionText) {
+          $poll->options()->create(['text' => $optionText]);
+      }
+
+      return response()->json($poll->load('options'), 201);
+  }
+  ```
+
+- **Маршрут**:
+  ```php
+  Route::post('/polls', [PollController::class, 'store']);
+  ```
+
+---
+
+### 3.5 Голосование
+Пользователи могут голосовать за варианты ответов в опросах:
+
+- **Методы контроллера**:
+  ```php
+  public function store(Request $request, Option $option)
+  {
+      $user = auth()->user();
+
+      if ($user->votes()->where('option_id', $option->id)->exists()) {
+          return response()->json(['message' => 'You have already voted for this poll.'], 400);
+      }
+
+      $vote = $user->votes()->create(['option_id' => $option->id]);
+      $option->increment('votes');
+
+      return response()->json(['message' => 'Your vote has been recorded.'], 201);
+  }
+  ```
+
+- **Маршрут**:
+  ```php
+  Route::post('/votes/{option}', [VoteController::class, 'store']);
+  ```
+
+---
+
+### 3.6 Защита от CSRF-атак
+- В каждой форме добавлен токен CSRF (`@csrf`).
+- Пример формы выхода:
+  ```blade
+  <form method="POST" action="{{ route('logout') }}">
+      @csrf
+      <button type="submit">Выйти</button>
+  </form>
+  ```
+
+---
+
+## 4. Технические детали
+
+### 4.1 База данных
+- **Таблицы**:
+  - `users`: Хранит информацию о пользователях.
+  - `polls`: Хранит опросы, созданные пользователями.
+  - `options`: Хранит варианты ответов для опросов.
+  - `votes`: Хранит голоса пользователей.
+
+- **Миграции**:
+  - Создание таблицы `polls`:
+    ```php
+    Schema::create('polls', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->string('question');
+        $table->boolean('is_active')->default(true);
+        $table->timestamps();
+    });
+    ```
+
+  - Создание таблицы `options`:
+    ```php
+    Schema::create('options', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('poll_id')->constrained()->onDelete('cascade');
+        $table->string('text');
+        $table->integer('votes')->default(0);
+        $table->timestamps();
+    });
+    ```
+
+  - Создание таблицы `votes`:
+    ```php
+    Schema::create('votes', function (Blueprint $table) {
+        $table->id();
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->foreignId('option_id')->constrained()->onDelete('cascade');
+        $table->timestamps();
+    });
+    ```
+
+---
+
+## 5. Контрольные вопросы
+
+### 5.1 Какие готовые решения для аутентификации предоставляет Laravel?
+Laravel предоставляет пакеты Breeze, Fortify, Jetstream для реализации аутентификации.
+
+### 5.2 Какие методы аутентификации пользователей вы знаете?
+- Через сессию (стандартный `Auth`).
+- API-токены (Passport, Sanctum).
+- OAuth (через Laravel Socialite).
+
+### 5.3 Чем отличается аутентификация от авторизации?
+- **Аутентификация**: Проверка личности пользователя (логин/пароль).
+- **Авторизация**: Проверка прав доступа к ресурсам (например, роли пользователей).
+
+### 5.4 Как обеспечить защиту от CSRF-атак в Laravel?
+- Использовать `@csrf` в формах.
+- Проверять CSRF-токен в запросах.
+
